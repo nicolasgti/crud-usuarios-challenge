@@ -1,98 +1,213 @@
+# CRUD Usuários Challenge
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Descrição
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este projeto é um sistema de CRUD de usuários desenvolvido com o framework [NestJS](https://nestjs.com/). Ele permite criar, listar, atualizar e excluir usuários, além de implementar autenticação JWT para proteger rotas.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Funcionalidades
 
-## Project setup
+- **Autenticação JWT**: Proteção de rotas com autenticação baseada em tokens.
+- **CRUD de Usuários**:
+  - Criar usuários.
+  - Listar usuários com paginação e busca.
+  - Atualizar informações de usuários.
+  - Remover usuários.
+- **Usuário Root**: Suporte para um usuário administrador com permissões especiais.
+- **Validação de Dados**: Validação de entrada usando `class-validator`.
+- **Banco de Dados**: Integração com TypeORM e suporte a MySQL.
 
+---
+
+## Tecnologias Utilizadas
+
+- **Node.js**: Ambiente de execução.
+- **NestJS**: Framework para construção de APIs escaláveis.
+- **TypeScript**: Linguagem principal do projeto.
+- **TypeORM**: ORM para manipulação do banco de dados.
+- **JWT**: Autenticação baseada em tokens.
+- **MySQL**: Banco de dados utilizado no projeto.
+
+---
+
+## Requisitos
+
+- **Node.js**: Versão 16 ou superior.
+- **NPM**: Versão 7 ou superior.
+- **Banco de Dados**: MySQL.
+
+---
+
+## Instalação
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/crud-usuarios-challenge.git
+   cd crud-usuarios-challenge
+   ```
+
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+
+3. Configure as variáveis de ambiente:
+   Crie um arquivo `.env` na raiz do projeto e adicione as seguintes variáveis:
+   ```env
+   JWT_SECRET=my-secret-key
+   DATABASE_URL=mysql://usuario:senha@localhost:3306/crud_usuarios
+   ```
+
+4. Configure o banco de dados:
+   - Crie o banco de dados no MySQL com o seguinte comando:
+     ```sql
+     CREATE DATABASE crud_usuarios;
+     ```
+   - Certifique-se de que o arquivo `data-source.ts` está configurado corretamente para usar o MySQL.
+
+5. Rode o script para criar o usuário root:
+   Execute o seguinte comando para criar o usuário root no banco de dados:
+   ```bash
+   npx ts-node src/users/seed-root-user.ts
+   ```
+
+---
+
+## Executando o Projeto
+
+### Ambiente de Desenvolvimento
+
+Para rodar o projeto em modo de desenvolvimento:
 ```bash
-$ npm install
+npm run start:dev
 ```
 
-## Compile and run the project
+### Ambiente de Produção
 
+Para compilar e rodar o projeto em produção:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm run build
+npm run start:prod
 ```
 
-## Run tests
+---
 
+## Rotas Disponíveis
+
+### Autenticação
+
+- **POST /auth/login**: Gera um token JWT para autenticação.
+  - **Body**:
+    ```json
+    {
+      "email": "string",
+      "senha": "string"
+    }
+    ```
+
+### Usuários
+
+- **POST /users**: Cria um novo usuário (rota protegida).
+  - **Body**:
+    ```json
+    {
+      "nome": "string",
+      "email": "string",
+      "matricula": "string",
+      "senha": "string"
+    }
+    ```
+
+- **GET /users**: Lista todos os usuários com paginação.
+  - **Query Params**:
+    - `page`: Número da página (opcional, padrão: 1).
+    - `limit`: Limite de itens por página (opcional, padrão: 10).
+    - `search`: Termo de busca (opcional).
+
+- **GET /users/:id**: Retorna os detalhes de um usuário específico (rota protegida).
+
+- **PUT /users/:id**: Atualiza os dados de um usuário (rota protegida).
+  - **Body**:
+    ```json
+    {
+      "nome": "string",
+      "email": "string",
+      "matricula": "string"
+    }
+    ```
+
+- **DELETE /users/:id**: Remove um usuário (rota protegida).
+
+---
+
+## Testes
+
+### Testes Unitários
+Para rodar os testes unitários:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run test
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+### Testes de Integração (e2e)
+Para rodar os testes de integração:
 ```bash
-$ npm install -g mau
-$ mau deploy
+npm run test:e2e
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Cobertura de Testes
+Para gerar o relatório de cobertura:
+```bash
+npm run test:cov
+```
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## Estrutura do Projeto
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```plaintext
+src/
+├── auth/               # Módulo de autenticação (JWT)
+├── users/              # Módulo de usuários (CRUD)
+├── email/              # Módulo de envio de e-mails (opcional)
+├── main.ts             # Arquivo principal
+├── app.module.ts       # Módulo raiz
+├── data-source.ts      # Configuração do banco de dados
+```
 
-## Support
+## Contribuição
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Contribuições são bem-vindas! Siga os passos abaixo para contribuir:
 
-## Stay in touch
+1. Faça um fork do repositório.
+2. Crie uma branch para sua feature/bugfix:
+   ```bash
+   git checkout -b minha-feature
+   ```
+3. Faça commit das suas alterações:
+   ```bash
+   git commit -m "Minha nova feature"
+   ```
+4. Envie para o repositório remoto:
+   ```bash
+   git push origin minha-feature
+   ```
+5. Abra um Pull Request.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
 
-## License
+## Licença
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Este projeto está licenciado sob a licença [MIT](LICENSE).
+
+---
+
+## Autor
+
+- **Nome**: Nicolas Fernandes
+- **GitHub**: [nicolasgti](https://github.com/nicolasgti)
+- **E-mail**: nicolasgti@hotmail.com
