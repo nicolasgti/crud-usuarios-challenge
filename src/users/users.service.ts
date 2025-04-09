@@ -90,8 +90,49 @@ export class UsersService {
   }
 
   async update(id: number, user: Partial<User>) {
+    // Validação de tamanho dos campos
+    if (user.matricula && (user.matricula.length < 4 || user.matricula.length > 10)) {
+      throw new ConflictException('A matrícula deve ter entre 4 e 10 caracteres.');
+    }
+  
+    if (user.nome && user.nome.length > 30) {
+      throw new ConflictException('O nome deve ter no máximo 30 caracteres.');
+    }
+  
+    if (user.email) {
+      if (user.email.length > 40) {
+        throw new ConflictException('O email deve ter no máximo 40 caracteres.');
+      }
+  
+      // Validação para verificar se o email contém um '@'
+      if (!user.email.includes('@')) {
+        throw new ConflictException('O email deve ser válido e conter um "@"');
+      }
+  
+      // Verificar se o email já está cadastrado para outro usuário
+      const existingUserByEmail = await this.userRepository.findOne({
+        where: { email: user.email },
+      });
+  
+      if (existingUserByEmail && existingUserByEmail.id !== id) {
+        throw new ConflictException('O email já está cadastrado para outro usuário.');
+      }
+    }
+  
+    // Verificar se a matrícula já está cadastrada para outro usuário
+    if (user.matricula) {
+      const existingUserByMatricula = await this.userRepository.findOne({
+        where: { matricula: user.matricula },
+      });
+  
+      if (existingUserByMatricula && existingUserByMatricula.id !== id) {
+        throw new ConflictException('A matrícula já está cadastrada para outro usuário.');
+      }
+    }
+  
+    // Atualizar o usuário
     await this.userRepository.update(id, user);
-    return this.findOne(id); 
+    return this.findOne(id);
   }
 
   async remove(id: number) {
