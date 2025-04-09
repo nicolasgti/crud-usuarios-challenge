@@ -70,7 +70,7 @@ export class AuthService {
     // Aqui você deve enviar um e-mail com o link de redefinição
     // Exemplo: `http://frontend.com/reset-password?token=${resetToken}`
     
-    return { message: 'Password reset link sent to your email' };
+    return { message: 'Link para redefinir senha enviado para o e-mail' };
   }
 
   async resetPassword(token: string, newPassword: string) {

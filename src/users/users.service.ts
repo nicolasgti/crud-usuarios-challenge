@@ -19,7 +19,7 @@ export class UsersService {
     });
 
     if (existingUser) {
-      throw new ConflictException('Email or registration number already exists');
+      throw new ConflictException('Email ou Matricula já cadastrados');
     }
 
     const user = Object.assign(new User(), dto);
