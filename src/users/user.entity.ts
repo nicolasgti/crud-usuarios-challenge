@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 @Entity()
@@ -21,4 +21,13 @@ export class User {
 
   @Column({ nullable: true })
   resetPasswordToken?: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
+
+  @Column({ default: false })
+  isRoot: boolean;
 }
